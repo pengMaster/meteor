@@ -22,14 +22,29 @@ public class GradientPaintView extends View {
     private Paint paintMid;
     private Paint paintBottom;
 
-    private Point currentPointTop;
-    private Point currentPointMid;
-    private Point currentPointBottom;
-    //中间线
-    private Point startPointMid = new Point(600,300);
-    private Point endPointMid = new Point(0,300);
-    private int lineLengthMid = 40;
 
+    /**
+     * 中间线
+     * startPointMid:起始点位
+     * endPointMid：终止点位
+     * midXArrayRandom：x随机星线浮动范围
+     * trackHeightMax：轨道宽度最大值
+     * trackHeightMin：轨道宽度最小值
+     * midYArrayRandom：trackHeightMax+trackHeightMin控制
+     */
+    private Point startPointMid = new Point(600, 600);
+    private Point endPointMid = new Point(0, 600);
+    private int[] midXArrayRandom;
+    private int[] midYArrayRandom;
+    private int countStart = 20;
+    private int trackHeightMax = 140;
+    private int trackHeightMin = 20;
+
+    private Point startPointTop = new Point(600, 0);
+    private Point endPointTop = new Point(0, 600);
+    private int[] topXArrayRandom;
+    private int[] topYArrayRandom;
+    private int topWidth = 100;
 
     public GradientPaintView(Context context) {
         super(context);
@@ -42,7 +57,7 @@ public class GradientPaintView extends View {
         paintBottom = new Paint();
         paintTop.setStrokeWidth(3);
         paintMid.setStrokeWidth(3);
-        paintBottom.setStrokeWidth(5);
+        paintBottom.setStrokeWidth(3);
     }
 
     public GradientPaintView(Context context, AttributeSet attrs) {
@@ -53,123 +68,124 @@ public class GradientPaintView extends View {
         super(context, attrs, defStyleAttr);
     }
 
-    private void startTopAnimation() {
-
-        Point startPoint = new Point(600, 0);
-        Point endPoint = new Point(0, 300);
-        ValueAnimator anim = ValueAnimator
-                .ofObject(new PointEvaluator(), startPoint, endPoint);
-
-        anim.setRepeatCount(ValueAnimator.INFINITE);
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                currentPointTop = (Point) animation.getAnimatedValue();
-                invalidate();
-            }
-        });
-        anim.setDuration(3000);
-        anim.start();
-    }
-
-    private void startMidAnimation() {
-
-        ValueAnimator anim = ValueAnimator
-                .ofObject(new PointEvaluator(), startPointMid, endPointMid);
-
-        anim.setRepeatCount(ValueAnimator.INFINITE);
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                currentPointMid = (Point) animation.getAnimatedValue();
-                invalidate();
-            }
-        });
-        anim.setDuration(4000);
-        anim.start();
-    }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         initPaint();
-
-        if (currentPointTop == null) {
-            currentPointTop = new Point(600, 0);
-            drawStarLine(canvas,600, 0, 0, 300);
-            startTopAnimation();
-        } else {
-            float x = currentPointTop.getX();
-            float y = currentPointTop.getY();
-            drawStarLine(canvas,x, y, x -80, y+20);
-            drawStarLine(canvas,x-40, y+20, x -120, y+40);
-            drawStarLine(canvas,x-120, y+40, x -160, y+60);
-        }
-
-        if (currentPointMid == null) {
-            currentPointMid = new Point(600, 300);
-            drawStarLine(canvas,400, 300, 600, 300);
-            startMidAnimation();
-        } else {
-            float x = currentPointMid.getX();
-            float y = currentPointMid.getY();
-            // x:600 - 0  y:300 - 300 x浮动：300 [0，600] y浮动
-//            int midLineCount = 1;
-//            for (int i=0;i<midLineCount;i++){
-//                //random = [0,600]随机数
-//                int randomX = getRandom((int)endPointMid.getX(), (int)startPointMid.getX());
-//
-//                int randomY = getRandom(0, (int)startPointMid.getY());
-//                drawStarLine(canvas,randomX-40, randomY, randomX, randomY);
-//
-//            }
-//            int randomX = getRandom((int)endPointMid.getX(), (int)startPointMid.getX());
-//
-//            int random = getRandom(20, 60);
-            drawStarLine(canvas,x, 300+20, x-80, 300+20);
-            drawStarLine(canvas,x-80, 300-20, x-160, 300-20);
-            drawStarLine(canvas,x-120, 300, x-180, 300);
-            drawStarLine(canvas,x-220, 300+10, x-280, 300+10);
-            drawStarLine(canvas,x-10, 300+30, x-300, 300+30);
-
-        }
-
+        drawTopLines(canvas);
+        drawMidLines(canvas);
 
     }
 
     /**
-     *  画星投影线
+     * 画上部线条
+     *
+     * @param canvas
+     */
+    private void drawTopLines(Canvas canvas) {
+        float x1 = startPointTop.getX();
+        float y1 = startPointTop.getY();
+        float x2 = endPointTop.getX();
+        int abs1 = (int) Math.abs(x1);
+        int abs2 = (int) Math.abs(x2);
+
+        if (null == topXArrayRandom) {
+            topXArrayRandom = getRandomArray(abs1 - topWidth, abs1, countStart);
+        }
+        if (null == topYArrayRandom) {
+            if (abs1 > abs2) {
+                topYArrayRandom = getRandomArray(abs2, abs1, countStart);
+            } else {
+                topYArrayRandom = getRandomArray(abs1, abs2, countStart);
+            }
+        }
+
+        for (int i = 0; i < topXArrayRandom.length; i++) {
+            int randomXCount = topXArrayRandom[i];
+            int randomYCount = topYArrayRandom[i];
+            drawStarLine(canvas, randomXCount, 0, randomYCount, randomXCount - randomYCount, paintTop);
+        }
+        //            drawStarLine(canvas, 600, 0, 0, 600, paintTop);
+//            drawStarLine(canvas, 600, 0, 0, 600, paintTop);
+//            drawStarLine(canvas, 500, 0, 0, 500, paintTop);
+//            drawStarLine(canvas, 520, 0, 400, 120, paintTop);
+//            drawStarLine(canvas, 540, 0, 0, 540, paintTop);
+//            drawStarLine(canvas, 560, 0, 0, 560, paintTop);
+    }
+
+    /**
+     * 画中间线条
+     *
+     * @param canvas
+     */
+    private void drawMidLines(Canvas canvas) {
+        float midsX1 = startPointMid.getX();
+        float midsY1 = startPointMid.getY();
+        float mideX1 = endPointMid.getX();
+        if (null == midXArrayRandom) {
+
+            int abs1 = (int) Math.abs(midsX1);
+            int abs2 = (int) Math.abs(mideX1);
+            if (abs1 > abs2) {
+                midXArrayRandom = getRandomArray(abs2, abs1, countStart);
+            } else {
+                midXArrayRandom = getRandomArray(abs1, abs2, countStart);
+            }
+        }
+        if (null == midYArrayRandom) {
+            midYArrayRandom = getRandomArray(trackHeightMin, trackHeightMax, countStart);
+        }
+        for (int i = 0; i < midXArrayRandom.length; i++) {
+            int randomXCount = midXArrayRandom[i];
+            int randomYCount = midYArrayRandom[i];
+            drawStarLine(canvas, midsX1, midsY1 + randomYCount, midsX1 - randomXCount, midsY1 + randomYCount, paintMid);
+        }
+    }
+
+    /**
+     * 画星投影线
      *
      * @param canvas 画布
      * @param startX x起始位置
      * @param startY y起始位置
-     * @param stopX x起终止位置
-     * @param stopY y终止位置
+     * @param stopX  x起终止位置
+     * @param stopY  y终止位置
      */
-    private void drawStarLine(Canvas canvas, float startX, float startY, float stopX, float stopY) {
+    private void drawStarLine(Canvas canvas, float startX, float startY, float stopX, float stopY, Paint paint) {
 
-        LinearGradient gradient2 = new LinearGradient(startX, startY,stopX , stopY, Color.argb(0, 0, 0, 0), Color.WHITE, Shader.TileMode.CLAMP);
-        paintMid.setShader(gradient2);
-        canvas.drawLine(startX, startY, stopX, stopY, paintMid);
+        LinearGradient gradient2 = new LinearGradient(startX, startY, stopX, stopY, Color.argb(0, 0, 0, 0), Color.WHITE, Shader.TileMode.CLAMP);
+        paint.setShader(gradient2);
+        canvas.drawLine(startX, startY, stopX, stopY, paint);
     }
 
-    /**
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     */
-    public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
 
     /**
      * 获取随机数
      *
      * @return
      */
-    private int getRandom(int min,int max){
+    private int getRandom(int min, int max) {
         Random random = new Random();
-        return random.nextInt(max)%(max-min+1) + min;
+        return random.nextInt(max) % (max - min + 1) + min;
+    }
+
+    /**
+     * 获取随机数组
+     *
+     * @param min    数组最小值
+     * @param max    数组的最大值
+     * @param length 数组长度
+     * @return
+     */
+    private int[] getRandomArray(int min, int max, int length) {
+        int[] randomResult = new int[length];
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            int randomCount = random.nextInt(max) % (max - min + 1) + min;
+            randomResult[i] = randomCount;
+        }
+        return randomResult;
     }
 }
