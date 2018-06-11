@@ -32,19 +32,30 @@ public class GradientPaintView extends View {
      * trackHeightMin：轨道宽度最小值
      * midYArrayRandom：trackHeightMax+trackHeightMin控制
      */
-    private Point startPointMid = new Point(600, 600);
-    private Point endPointMid = new Point(0, 600);
+    private Point startPointMid = new Point(300, 150);
+    private Point endPointMid = new Point(0, 150);
     private int[] midXArrayRandom;
     private int[] midYArrayRandom;
-    private int countStart = 20;
-    private int trackHeightMax = 140;
+    private int lineCountMid = 20;
+    private int trackHeightMax = 80;
     private int trackHeightMin = 20;
 
-    private Point startPointTop = new Point(600, 0);
-    private Point endPointTop = new Point(0, 600);
+    private Point startPointTop = new Point(200, 0);
+    private Point endPointTop = new Point(0, 200);
+    private int lineCountTop = 20;
     private int[] topXArrayRandom;
     private int[] topYArrayRandom;
-    private int topWidth = 100;
+    private int topWidth = 80;
+
+    private Point startPointBottom = new Point(200, 400);
+    private Point endPointBottom = new Point(0, 200);
+    private int[] bottomXArrayRandom;
+    private int[] bottomYArrayRandom;
+    private int lineCountBottom = 20;
+    //起始位置
+    private int[] bottomXsArrayRandom;
+    private int bottomWidth = 80;
+    private int bottomTrackLength = 130;
 
     public GradientPaintView(Context context) {
         super(context);
@@ -72,13 +83,54 @@ public class GradientPaintView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        //canvas.translate(350, 0);
+        //canvas.rotate(90); // 画布旋转（默认以原点，顺时针）
         initPaint();
         drawTopLines(canvas);
         drawMidLines(canvas);
-
+        drawBottomLines(canvas);
     }
+    /**
+     * 画上部线条
+     *
+     * @param canvas
+     */
+    private void drawBottomLines(Canvas canvas) {
+        float x1 = startPointBottom.getX();
+        float y1 = startPointBottom.getY();
+        float x2 = endPointBottom.getX();
+        float y2 = endPointBottom.getY();
+        int abs1 = (int) Math.abs(x1);
+        int abs2 = (int) Math.abs(x2);
 
+        if (null == bottomXArrayRandom) {
+            bottomXArrayRandom = getRandomArray((int)y2, (int)y2+bottomWidth, lineCountBottom);
+        }
+
+        if (null == bottomYArrayRandom) {
+            bottomYArrayRandom = getRandomArray(0, bottomTrackLength, lineCountBottom);
+        }
+
+        if (null == bottomXsArrayRandom) {
+            bottomXsArrayRandom = getRandomArray(0, (int)x1, lineCountBottom);
+        }
+
+        for (int i = 0; i < bottomXArrayRandom.length; i++) {
+            int randomXCount = bottomXArrayRandom[i];//235  269
+//            int randomYCount = bottomYArrayRandom[i];//44  91
+            int randomXsCount = bottomXsArrayRandom[i];//74  3
+            int randomYCount = randomXsCount+bottomYArrayRandom[i];//44  91
+
+          //  drawStarLine(canvas, randomYCount, randomYCount+randomXCount, randomYCount-40, randomXCount+randomYCount, paintBottom);
+            drawStarLine(canvas, randomYCount, randomYCount+randomXCount, randomXsCount, randomXCount+randomXsCount, paintBottom);
+        }
+        //drawStarLine(canvas, 44, 279, 74, 309, paintBottom);
+        //drawStarLine(canvas, 81, 360, 3, 272, paintBottom);
+//        drawStarLine(canvas, 200, 400, 100, 300, paintBottom);
+//        drawStarLine(canvas, 200, 400, 50, 250, paintBottom);
+//        drawStarLine(canvas, 100, 400, 0, 300, paintBottom);
+//        drawStarLine(canvas, 250, 500, 0, 250, paintBottom);
+    }
     /**
      * 画上部线条
      *
@@ -92,27 +144,22 @@ public class GradientPaintView extends View {
         int abs2 = (int) Math.abs(x2);
 
         if (null == topXArrayRandom) {
-            topXArrayRandom = getRandomArray(abs1 - topWidth, abs1, countStart);
+            topXArrayRandom = getRandomArray(abs1 - topWidth, abs1, lineCountTop);
         }
         if (null == topYArrayRandom) {
             if (abs1 > abs2) {
-                topYArrayRandom = getRandomArray(abs2, abs1, countStart);
+                topYArrayRandom = getRandomArray(abs2, abs1, lineCountTop);
             } else {
-                topYArrayRandom = getRandomArray(abs1, abs2, countStart);
+                topYArrayRandom = getRandomArray(abs1, abs2, lineCountTop);
             }
         }
-
+        double d1 = (x1 - y1) / x1;
         for (int i = 0; i < topXArrayRandom.length; i++) {
             int randomXCount = topXArrayRandom[i];
             int randomYCount = topYArrayRandom[i];
-            drawStarLine(canvas, randomXCount, 0, randomYCount, randomXCount - randomYCount, paintTop);
+            drawStarLine(canvas, randomXCount, y1, randomYCount, randomXCount-(int)(randomYCount*d1), paintTop);
         }
-        //            drawStarLine(canvas, 600, 0, 0, 600, paintTop);
-//            drawStarLine(canvas, 600, 0, 0, 600, paintTop);
-//            drawStarLine(canvas, 500, 0, 0, 500, paintTop);
-//            drawStarLine(canvas, 520, 0, 400, 120, paintTop);
-//            drawStarLine(canvas, 540, 0, 0, 540, paintTop);
-//            drawStarLine(canvas, 560, 0, 0, 560, paintTop);
+
     }
 
     /**
@@ -129,13 +176,13 @@ public class GradientPaintView extends View {
             int abs1 = (int) Math.abs(midsX1);
             int abs2 = (int) Math.abs(mideX1);
             if (abs1 > abs2) {
-                midXArrayRandom = getRandomArray(abs2, abs1, countStart);
+                midXArrayRandom = getRandomArray(abs2, abs1, lineCountMid);
             } else {
-                midXArrayRandom = getRandomArray(abs1, abs2, countStart);
+                midXArrayRandom = getRandomArray(abs1, abs2, lineCountMid);
             }
         }
         if (null == midYArrayRandom) {
-            midYArrayRandom = getRandomArray(trackHeightMin, trackHeightMax, countStart);
+            midYArrayRandom = getRandomArray(trackHeightMin, trackHeightMax, lineCountMid);
         }
         for (int i = 0; i < midXArrayRandom.length; i++) {
             int randomXCount = midXArrayRandom[i];
