@@ -14,14 +14,15 @@
     tools:context="com.lan.john.gradienttest.GradientPaintActivity">
 
     <com.lan.john.gradienttest.wiget.GradientPaintView
+        android:id="@+id/gd_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@android:color/transparent"
-        app:bottomLineCount="20"
+        app:bottomLineCount="3"
         app:lineWidth="3"
-        app:midLineCount="20"
-        app:topLineCount="20"
+        app:midLineCount="3"
+        app:topLineCount="3"
         app:type="top" />
 
     <LinearLayout
@@ -35,10 +36,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            app:bottomLineCount="20"
+            app:bottomLineCount="3"
             app:lineWidth="3"
-            app:midLineCount="20"
-            app:topLineCount="20"
+            app:midLineCount="3"
+            app:topLineCount="3"
             app:type="mid_lift" />
 
         <com.lan.john.gradienttest.wiget.GradientPaintView
@@ -46,10 +47,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            app:bottomLineCount="20"
+            app:bottomLineCount="3"
             app:lineWidth="3"
-            app:midLineCount="20"
-            app:topLineCount="20"
+            app:midLineCount="3"
+            app:topLineCount="3"
             app:type="mid_right" />
     </LinearLayout>
 
@@ -58,9 +59,9 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@android:color/transparent"
-        app:bottomLineCount="20"
+        app:bottomLineCount="3"
         app:lineWidth="3"
-        app:midLineCount="20"
-        app:topLineCount="20"
+        app:midLineCount="3"
+        app:topLineCount="3"
         app:type="bottom" />
 </LinearLayout>

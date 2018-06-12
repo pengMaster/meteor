@@ -6,6 +6,7 @@
 #### 效果图
    <img src="https://github.com/pengMaster/meteor/blob/master/doc/show.png" width="150" height="250" align="left" alt=""/>
       <img src="https://github.com/pengMaster/meteor/blob/master/doc/show1.png" width="150" height="250" align="center" alt=""/>
+      <img src="https://github.com/pengMaster/meteor/blob/master/doc/show2.png" width="150" height="250" align="right" alt=""/>
 
 #### 软件架构
 软件架构说明
@@ -28,7 +29,7 @@
 
 ```java
     dependencies {
-        implementation 'com.github.pengMaster:meteor:v1.0.2'
+        implementation 'com.github.pengMaster:meteor:v1.0.3'
     }
 ```
 
@@ -59,6 +60,26 @@
         app:midLineCount="20"
         app:bottomLineCount="8"
         app:type="top" />
+
+```
+
+5.edit count
+```java
+    /**
+     * 代码动态设置线束
+     *
+     * @param countTop 顶部线束数量
+     * @param countMid 中间线束数量
+     * @param countBottom 底部线束数量
+     */
+    public void setLineCount(int countTop,int countMid ,int countBottom){
+        lineCountTop = countTop;
+        lineCountMid = countMid;
+        lineCountBottom = countBottom;
+        //可在线程中刷新
+        postInvalidate();
+    }
+    }
 
 ```
 #### 参与贡献

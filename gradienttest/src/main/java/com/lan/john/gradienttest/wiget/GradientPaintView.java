@@ -338,4 +338,19 @@ public class GradientPaintView extends View {
         }
         return randomResult;
     }
+
+    /**
+     * 代码动态设置线束
+     *
+     * @param countTop 顶部线束数量
+     * @param countMid 中间线束数量
+     * @param countBottom 底部线束数量
+     */
+    public void setLineCount(int countTop,int countMid ,int countBottom){
+        lineCountTop = countTop;
+        lineCountMid = countMid;
+        lineCountBottom = countBottom;
+        //可在线程中刷新
+        postInvalidate();
+    }
 }
