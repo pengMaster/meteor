@@ -1,6 +1,5 @@
 package com.lan.john.gradienttest.wiget;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -9,7 +8,9 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.lan.john.gradienttest.R;
 
@@ -19,7 +20,7 @@ import java.util.Random;
  * Created by john on 2017/3/16.
  */
 
-public class GradientPaintView extends View {
+public class GradientBottomPaintView extends View {
 
     private Paint paintTop;
     private Paint paintMid;
@@ -65,92 +66,57 @@ public class GradientPaintView extends View {
     private int bottomTrackLength = 130;
 
     /**
-     * mLineColor:线条颜色
-     * mTopLineCount；顶部线条数量
-     * mMidLineCount；中部线条数量
-     * mBottomLineCount；底部线条数量
-     * mType: top mid_lift mid_right  bottom
+     * 线条颜色
      */
     private int mLineColor;
-    private int mTopLineCount;
-    private int mMidLineCount;
-    private int mBottomLineCount;
-    private int mLineWidth;
-    private String mType;
 
-
-    public GradientPaintView(Context context) {
-        this(context,null);
+    public GradientBottomPaintView(Context context) {
+        super(context);
+        initPaint();
 
     }
 
-    public GradientPaintView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
-
+    public GradientBottomPaintView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initPaint(context,attrs);
     }
 
-    public GradientPaintView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public GradientBottomPaintView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initPaint(context, attrs);
+        initPaint(context,attrs);
     }
-
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        switch (mType) {
-            case "top":
-                canvas.translate(700, 0);
-                canvas.rotate(90); // 画布旋转（默认以原点，顺时针）
-                break;
-            case "mid_lift":
-                break;
-            case "mid_right":
-                canvas.translate(450, 370);
-                canvas.rotate(180); // 画布旋转（默认以原点，顺时针）
-                break;
-            case "bottom":
-                canvas.translate(300, 600);
-                canvas.rotate(270); // 画布旋转（默认以原点，顺时针）
-                break;
-            default:
-                break;
-        }
-
-        drawTopLines(canvas);
-        drawMidLines(canvas);
-        drawBottomLines(canvas);
-    }
-
 
     private void initPaint(Context context, AttributeSet attrs) {
         //获取自定义属性。
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.GradientPaintView);
         mLineColor = typedArray.getColor(R.styleable.GradientPaintView_lineColor, Color.WHITE);
-        mTopLineCount = typedArray.getInteger(R.styleable.GradientPaintView_topLineCount, 0);
-        mMidLineCount = typedArray.getInteger(R.styleable.GradientPaintView_midLineCount, 0);
-        mBottomLineCount = typedArray.getInteger(R.styleable.GradientPaintView_bottomLineCount, 0);
-        mLineWidth = typedArray.getInteger(R.styleable.GradientPaintView_lineWidth, 0);
-        mType = typedArray.getString(R.styleable.GradientPaintView_type);
 
         paintTop = new Paint();
-        paintTop.setStrokeWidth(mLineWidth);
-        paintTop.setColor(mLineColor);
-        lineCountTop = mTopLineCount;
-
         paintMid = new Paint();
-        paintMid.setStrokeWidth(mLineWidth);
-        paintMid.setColor(mLineColor);
-        lineCountMid = mMidLineCount;
-
         paintBottom = new Paint();
-        paintBottom.setStrokeWidth(mLineWidth);
-        paintBottom.setColor(mLineColor);
-        lineCountBottom = mBottomLineCount;
-
+        paintTop.setStrokeWidth(3);
+        paintMid.setStrokeWidth(3);
+        paintBottom.setStrokeWidth(3);
+    }
+    private void initPaint() {
+        paintTop = new Paint();
+        paintMid = new Paint();
+        paintBottom = new Paint();
+        paintTop.setStrokeWidth(3);
+        paintMid.setStrokeWidth(3);
+        paintBottom.setStrokeWidth(3);
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        int screenWidth = getScreenWidth();
+        canvas.translate(-700, 0);
+        canvas.rotate(270); // 画布旋转（默认以原点，顺时针）
+        drawTopLines(canvas);
+        drawMidLines(canvas);
+        drawBottomLines(canvas);
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -166,7 +132,7 @@ public class GradientPaintView extends View {
         if (mode == MeasureSpec.EXACTLY) {
             result = size;
         } else {
-            result = 75;
+            result=75;
             if (mode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, size);
             }
@@ -191,7 +157,6 @@ public class GradientPaintView extends View {
         return result;
 
     }
-
     /**
      * 画上部线条
      *
@@ -206,7 +171,7 @@ public class GradientPaintView extends View {
         int abs2 = (int) Math.abs(x2);
 
         if (null == bottomXArrayRandom) {
-            bottomXArrayRandom = getRandomArray((int) y2, (int) y2 + bottomWidth, lineCountBottom);
+            bottomXArrayRandom = getRandomArray((int)y2, (int)y2+bottomWidth, lineCountBottom);
         }
 
         if (null == bottomYArrayRandom) {
@@ -214,17 +179,17 @@ public class GradientPaintView extends View {
         }
 
         if (null == bottomXsArrayRandom) {
-            bottomXsArrayRandom = getRandomArray(0, (int) x1, lineCountBottom);
+            bottomXsArrayRandom = getRandomArray(0, (int)x1, lineCountBottom);
         }
 
         for (int i = 0; i < bottomXArrayRandom.length; i++) {
             int randomXCount = bottomXArrayRandom[i];//235  269
 //            int randomYCount = bottomYArrayRandom[i];//44  91
             int randomXsCount = bottomXsArrayRandom[i];//74  3
-            int randomYCount = randomXsCount + bottomYArrayRandom[i];//44  91
+            int randomYCount = randomXsCount+bottomYArrayRandom[i];//44  91
 
-            //  drawStarLine(canvas, randomYCount, randomYCount+randomXCount, randomYCount-40, randomXCount+randomYCount, paintBottom);
-            drawStarLine(canvas, randomYCount, randomYCount + randomXCount, randomXsCount, randomXCount + randomXsCount, paintBottom);
+          //  drawStarLine(canvas, randomYCount, randomYCount+randomXCount, randomYCount-40, randomXCount+randomYCount, paintBottom);
+            drawStarLine(canvas, randomYCount, randomYCount+randomXCount, randomXsCount, randomXCount+randomXsCount, paintBottom);
         }
         //drawStarLine(canvas, 44, 279, 74, 309, paintBottom);
         //drawStarLine(canvas, 81, 360, 3, 272, paintBottom);
@@ -233,7 +198,6 @@ public class GradientPaintView extends View {
 //        drawStarLine(canvas, 100, 400, 0, 300, paintBottom);
 //        drawStarLine(canvas, 250, 500, 0, 250, paintBottom);
     }
-
     /**
      * 画上部线条
      *
@@ -260,7 +224,7 @@ public class GradientPaintView extends View {
         for (int i = 0; i < topXArrayRandom.length; i++) {
             int randomXCount = topXArrayRandom[i];
             int randomYCount = topYArrayRandom[i];
-            drawStarLine(canvas, randomXCount, y1, randomYCount, randomXCount - (int) (randomYCount * d1), paintTop);
+            drawStarLine(canvas, randomXCount, y1, randomYCount, randomXCount-(int)(randomYCount*d1), paintTop);
         }
 
     }
@@ -337,5 +301,33 @@ public class GradientPaintView extends View {
             randomResult[i] = randomCount;
         }
         return randomResult;
+    }
+
+    /**
+     * 得到屏幕宽度
+     *
+     * @return
+     */
+    private int getScreenWidth() {
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
+    }
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     * 根据手机的分辨率从 px(像素) 的单位 转成为 dp
+     */
+    public static int px2dip(Context context, float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
     }
 }

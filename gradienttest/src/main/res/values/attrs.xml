@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GradientPaintView">
+
+        <attr name="lineColor" format="color"/>
+
+        <attr name="topLineCount" format="integer"/>
+
+        <attr name="midLineCount" format="integer"/>
+
+
+        <attr name="bottomLineCount" format="integer"/>
+
+        <attr name="lineWidth" format="integer"/>
+
+        <attr name="type" format="string"/>
+
+    </declare-styleable>
+</resources>
