@@ -28,7 +28,7 @@
 
 ```java
     dependencies {
-        implementation 'com.github.pengMaster:meteor:v1.0.3'
+        implementation 'com.github.pengMaster:meteor:v1.0.2'
     }
 ```
 
