@@ -14,41 +14,41 @@
 #### 安装教程
 1.Add it in your root build.gradle
 
-    ```java
+```java
     allprojects {
 		repositories {
 			...
 			maven { url 'https://jitpack.io' }
 		}
 	}
-    ```
+```
     
 2.Add it in your App build.gradle
 
-    ```java
+```java
     dependencies {
         implementation 'com.github.pengMaster:meteor:v1.0.2'
     }
-    ```
+```
 
 #### 使用说明
 
 
 3.Attribute introduction
 
-    - type :整体线束所处位置
-        -- top:至于顶部，头朝下
-        -- mid_left:至于左侧，头朝右
-        -- mid_right:至于右侧，头朝左
-        -- bottom:至于底部，头朝上
-    - topLineCount :顶部线束数量
-    - midLineCount :中部线束数量
-    - bottomLineCount :底部线束数量
-    - lineWidth :每条线束宽度
-    - lineColor :每条线束颜色
+- type :整体线束所处位置
+    - top:至于顶部，头朝下
+    - mid_left:至于左侧，头朝右
+    - mid_right:至于右侧，头朝左
+    - bottom:至于底部，头朝上
+- topLineCount :顶部线束数量
+- midLineCount :中部线束数量
+- bottomLineCount :底部线束数量
+- lineWidth :每条线束宽度
+- lineColor :每条线束颜色
 
 4.import your project
-    ```java
+```java
     <com.lan.john.gradienttest.wiget.GradientPaintView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -59,7 +59,7 @@
         app:bottomLineCount="8"
         app:type="top" />
 
-    ```
+```
 #### 参与贡献
 
 1. Fork 本项目
