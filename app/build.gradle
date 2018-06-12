@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "25.0.1"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.lan.john.testexample"
         minSdkVersion 19
@@ -21,10 +21,11 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestApi('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile project(':gradienttest')
-    testCompile 'junit:junit:4.12'
+    api 'com.android.support:appcompat-v7:24.2.1'
+    api project(':gradienttest')
+    testImplementation 'junit:junit:4.12'
+//    implementation 'com.github.pengMaster:meteor:v1.0'
 }
