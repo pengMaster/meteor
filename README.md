@@ -4,7 +4,8 @@
 模仿流星轨迹，自定义星投影控件
 
 #### 效果图
-   <img src="https://github.com/wp521/fingerLock/blob/master/pic/show.png" width="150" height="250" align="left" alt=""/>
+   <img src="https://github.com/pengMaster/meteor/blob/master/doc/show.png" width="150" height="250" align="left" alt=""/>
+   
 
 #### 软件架构
 软件架构说明
