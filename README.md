@@ -12,8 +12,8 @@
 
 
 #### 安装教程
-
 1.Add it in your root build.gradle
+
     ```java
     allprojects {
 		repositories {
@@ -22,7 +22,9 @@
 		}
 	}
     ```
+    
 2.Add it in your App build.gradle
+
     ```java
     dependencies {
         implementation 'com.github.pengMaster:meteor:v1.0.2'
